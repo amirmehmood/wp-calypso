@@ -59,8 +59,11 @@ var FormFields = React.createClass( {
 		this.setState( { compactToggled: ! this.state.compactToggled } );
 	},
 
+	getUsageStats: function ( Component ) {
+		return this.props.getUsageStats( Component, 'forms' ).count || 0;
+	},
+
 	render: function() {
-		const { componentsUsageStats = {} } = this.props
 		return (
 			<DocsExample
 				title="Form Fields"
@@ -84,11 +87,11 @@ var FormFields = React.createClass( {
 							<FormCheckbox id="comment_like_notification" name="comment_like_notification" />
 							<span>Email me when someone Likes one of my comments.</span>
 						</FormLabel>
-						<DocsExampleStats count={ componentsUsageStats.formCheckbox } />
+						<DocsExampleStats count={ this.getUsageStats( FormCheckbox ) } />
 					</FormFieldset>
 
 					<FormFieldset>
-						<div class="form-fieldset">
+						<div className="form-fieldset">
 							<FormLabel htmlFor="username">Disabled Form Text Input</FormLabel>
 							<FormTextInput
 								id="username"
@@ -98,13 +101,13 @@ var FormFields = React.createClass( {
 							/>
 						</div>
 
-						<div class="form-fieldset">
+						<div className="form-fieldset">
 							<FormLabel htmlFor="username">Form Text Input</FormLabel>
 							<FormTextInput id="username" name="username" placeholder="Placeholder text..." />
 							<FormSettingExplanation>This is an explanation of FormTextInput.</FormSettingExplanation>
 						</div>
 
-						<div class="form-fieldset">
+						<div className="form-fieldset">
 							<FormLabel htmlFor="text_valid">Form Text Input</FormLabel>
 							<FormTextInput
 								autoCapitalize="off"
@@ -118,7 +121,7 @@ var FormFields = React.createClass( {
 							<FormInputValidation text="Your text can be saved." />
 						</div>
 
-						<div class="form-fieldset">
+						<div className="form-fieldset">
 							<FormLabel htmlFor="text_invalid">Form Text Input</FormLabel>
 							<FormTextInput
 								autoCapitalize="off"
@@ -132,7 +135,7 @@ var FormFields = React.createClass( {
 							<FormInputValidation isError text="Your text is too short." />
 						</div>
 
-						<DocsExampleStats count={ componentsUsageStats.formTextInput } />
+						<DocsExampleStats count={ this.getUsageStats( FormTextInput ) } />
 					</FormFieldset>
 
 					<FormFieldset>
@@ -143,7 +146,7 @@ var FormFields = React.createClass( {
 							prefix="Prefix"
 							suffix="Suffix"
 							/>
-						<DocsExampleStats count={ componentsUsageStats.formTextInputWithAffixes } />
+						<DocsExampleStats count={ this.getUsageStats( FormTextInputWithAffixes ) } />
 					</FormFieldset>
 
 					<FormFieldset>
@@ -154,7 +157,7 @@ var FormFields = React.createClass( {
 							<option>3</option>
 							<option>4</option>
 						</FormSelect>
-						<DocsExampleStats count={ componentsUsageStats.formSelect } />
+						<DocsExampleStats count={ this.getUsageStats( FormSelect ) } />
 					</FormFieldset>
 
 					<FormFieldset>
@@ -162,7 +165,7 @@ var FormFields = React.createClass( {
 						<FormPasswordInput
 							id="password"
 							name="password" />
-						<DocsExampleStats count={ componentsUsageStats.formPasswordInput } />
+						<DocsExampleStats count={ this.getUsageStats( FormPasswordInput ) } />
 					</FormFieldset>
 
 					<FormLegend>Form Toggle</FormLegend>
@@ -175,7 +178,7 @@ var FormFields = React.createClass( {
 						checked={ false }
 						disabled={ true }
 					/>
-					<DocsExampleStats count={ componentsUsageStats.formToggle } />
+					<DocsExampleStats count={ this.getUsageStats( FormToggle ) } />
 					<br />
 					<FormToggle
 						checked={ true }
@@ -191,12 +194,12 @@ var FormFields = React.createClass( {
 						checked={ false }
 						disabled={ true }
 					/>
-					<DocsExampleStats count={ componentsUsageStats['formToggle/compact'] } />
+					<DocsExampleStats count={ this.getUsageStats( CompactFormToggle ) } />
 
 					<FormButtonsBar>
 						<FormButton>Form Button</FormButton>
 					</FormButtonsBar>
-					<DocsExampleStats count={ componentsUsageStats.formButtonsBar } />
+					<DocsExampleStats count={ this.getUsageStats( FormButtonsBar ) } />
 				</Card>
 
 				<Card>
@@ -205,13 +208,13 @@ var FormFields = React.createClass( {
 					<FormFieldset>
 						<FormLabel htmlFor="country_code">Form Country Select</FormLabel>
 						<FormCountrySelect name="country_code" id="country_code" countriesList={ countriesList } />
-						<DocsExampleStats count={ componentsUsageStats.formCountrySelect } />
+						<DocsExampleStats count={ this.getUsageStats( FormCountrySelect ) } />
 					</FormFieldset>
 
 					<FormFieldset>
 						<FormLabel htmlFor="us_state">Form US State Select</FormLabel>
 						<FormStateSelector name="us_state" id="us_state" />
-						<DocsExampleStats count={ componentsUsageStats.usStateSelector } />
+						<DocsExampleStats count={ this.getUsageStats( FormStateSelector ) } />
 					</FormFieldset>
 
 					<FormFieldset>
@@ -225,13 +228,13 @@ var FormFields = React.createClass( {
 							<FormRadio value="second" checked={ 'second' === this.state.checkedRadio } onChange={ this.handleRadioChange } />
 							<span>Second radio</span>
 						</FormLabel>
-						<DocsExampleStats count={ componentsUsageStats.formRadio } />
+						<DocsExampleStats count={ this.getUsageStats( FormRadio ) } />
 					</FormFieldset>
 
 					<FormFieldset>
 						<FormLabel htmlFor="telInput">Form Tel Input</FormLabel>
 						<FormTelInput name="telInput" id="telInput" placeholder="Placeholder text..." />
-						<DocsExampleStats count={ componentsUsageStats.formTelInput } />
+						<DocsExampleStats count={ this.getUsageStats( FormTelInput ) } />
 					</FormFieldset>
 
 					<FormFieldset>
@@ -241,20 +244,20 @@ var FormFields = React.createClass( {
 							initialPhoneNumber="8772733049"
 							countriesList={ countriesList }
 							/>
-						<DocsExampleStats count={ componentsUsageStats.formPhoneInput } />
+						<DocsExampleStats count={ this.getUsageStats( FormPhoneInput ) } />
 					</FormFieldset>
 
 					<FormFieldset>
 						<FormLabel htmlFor="textarea">Form Textarea</FormLabel>
 						<FormTextarea name="textarea" id="textarea" placeholder="Placeholder text..."></FormTextarea>
-						<DocsExampleStats count={ componentsUsageStats.formTextarea } />
+						<DocsExampleStats count={ this.getUsageStats( FormTextarea ) } />
 					</FormFieldset>
 
 					<FormButtonsBar>
 						<FormButton>Form Button</FormButton>
 						<FormButton type="button" isPrimary={ false }>Secondary Form Button</FormButton>
 					</FormButtonsBar>
-					<DocsExampleStats count={ componentsUsageStats.formButtonsBar } />
+					<DocsExampleStats count={ this.getUsageStats( FormButtonsBar ) } />
 				</Card>
 			</DocsExample>
 		);
