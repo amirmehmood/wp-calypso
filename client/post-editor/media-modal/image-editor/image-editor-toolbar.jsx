@@ -13,6 +13,9 @@ import PopoverMenu from 'components/popover/menu';
 import PopoverMenuItem from 'components/popover/menu-item';
 import { AspectRatios } from 'state/ui/editor/image-editor/constants';
 import {
+	getImageEditorAspectRatio,
+} from 'state/ui/editor/image-editor/selectors';
+import {
 	imageEditorRotateCounterclockwise,
 	imageEditorFlip,
 	setImageEditorAspectRatio
@@ -22,6 +25,7 @@ const MediaModalImageEditorToolbar = React.createClass( {
 	displayName: 'MediaModalImageEditorToolbar',
 
 	propTypes: {
+		aspectRatio: React.PropTypes.string,
 		imageEditorRotateCounterclockwise: React.PropTypes.func,
 		imageEditorFlip: React.PropTypes.func,
 		setImageEditorAspectRatio: React.PropTypes.func
@@ -62,6 +66,43 @@ const MediaModalImageEditorToolbar = React.createClass( {
 		}
 	},
 
+	renderAspectRatios() {
+		const items = [
+			{
+				action: AspectRatios.FREE,
+				label: this.translate( 'Free' )
+			},
+			{
+				action: AspectRatios.ORIGINAL,
+				label: this.translate( 'Original' )
+			},
+			{
+				action: AspectRatios.ASPECT_1X1,
+				label: this.translate( 'Square' )
+			},
+			{
+				action: AspectRatios.ASPECT_16X9,
+				label: this.translate( '16:9' )
+			},
+			{
+				action: AspectRatios.ASPECT_4X3,
+				label: this.translate( '4:3' )
+			},
+			{
+				action: AspectRatios.ASPECT_3X2,
+				label: this.translate( '3:2' )
+			}
+		];
+
+		return items.map( item => (
+			<PopoverMenuItem
+				key={ 'image-editor-toolbar-aspect-' + item.action }
+				action={ item.action }>
+				{ this.props.aspectRatio === item.action ? <Gridicon icon="checkmark" size={ 14 }/> : false } { item.label }
+			</PopoverMenuItem>
+		) );
+	},
+
 	renderButtons() {
 		const buttons = [
 			{
@@ -85,18 +126,16 @@ const MediaModalImageEditorToolbar = React.createClass( {
 			}
 		];
 
-		return buttons.map( function( button ) {
-			return (
+		return buttons.map( button => (
 				<button
-					key={ 'edit-toolbar-' + button.tool }
+					key={ 'image-editor-toolbar-' + button.tool }
 					ref={ button.ref }
 					className={ 'editor-media-modal-image-editor__toolbar-button' }
 					onClick={ button.onClick } >
 					<Gridicon icon={ button.icon } size={ 36 } />
 					<span>{ button.text }</span>
 				</button>
-			);
-		}, this );
+			) );
 	},
 
 	render() {
@@ -108,12 +147,7 @@ const MediaModalImageEditorToolbar = React.createClass( {
 						position="top"
 						context={ this.refs && this.refs.aspectButton }
 						className="popover is-dialog-visible">
-					<PopoverMenuItem action={ AspectRatios.FREE }>{ this.translate( 'Free' ) }</PopoverMenuItem>
-					<PopoverMenuItem action={ AspectRatios.ORIGINAL }>{ this.translate( 'Original' ) }</PopoverMenuItem>
-					<PopoverMenuItem action={ AspectRatios.ASPECT_1X1 }>{ this.translate( 'Square' ) }</PopoverMenuItem>
-					<PopoverMenuItem action={ AspectRatios.ASPECT_16X9 }>{ this.translate( '16:9' ) }</PopoverMenuItem>
-					<PopoverMenuItem action={ AspectRatios.ASPECT_4X3 }>{ this.translate( '4:3' ) }</PopoverMenuItem>
-					<PopoverMenuItem action={ AspectRatios.ASPECT_3X2 }>{ this.translate( '3:2' ) }</PopoverMenuItem>
+						{ this.renderAspectRatios() }
 				</PopoverMenu>
 			</div>
 		);
@@ -121,6 +155,8 @@ const MediaModalImageEditorToolbar = React.createClass( {
 } );
 
 export default connect(
-	null,
+	state => ( {
+		aspectRatio: getImageEditorAspectRatio( state )
+	} ),
 	{ imageEditorRotateCounterclockwise, imageEditorFlip, setImageEditorAspectRatio }
 )( MediaModalImageEditorToolbar );
