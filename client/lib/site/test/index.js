@@ -74,4 +74,20 @@ describe( 'Calypso Site', () => {
 			expect( site ).to.have.property( 'name' );
 		} );
 	} );
+
+	describe( 'replacing attributes', () => {
+		const mockSiteData = {
+			ID: 1234,
+			name: 'Hello',
+			description: 'Hunting bugs is fun.'
+		};
+
+		it( "removes icon attr if it isn't present in the new attributes", () => {
+			const site = Site( Object.assign( {}, mockSiteData, { icon: {} } ) );
+
+			site.replace( mockSiteData );
+
+			expect( site ).to.not.have.property( 'icon' );
+		} );
+	} );
 } );

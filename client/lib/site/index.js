@@ -61,6 +61,12 @@ Site.prototype.attributes = function( attributes ) {
 	this.updateComputedAttributes();
 };
 
+/**
+ * Updates one or many site's attributes. Won't remove current attributes if they are not
+ * present in the new ones. Use Site.prototype.replace if you want to remove them.
+ * @param {object} attributes - New attributes for a site.
+ * @returns {boolean} - Returns true if attributes changed, otherwise false.
+ */
 Site.prototype.set = function( attributes ) {
 	var changed = false;
 
@@ -78,7 +84,39 @@ Site.prototype.set = function( attributes ) {
 	}
 
 	return changed;
+};
 
+/**
+ * Replaces all site's attributes. Will remove current attributes if they are not present in the
+ * new ones. Use Site.prototype.set if you want to update one or few attributes instead.
+ *
+ * TODO: replace/remove all site's attrs (currently, only site `icon` is removed if not present in new attrs).
+ *
+ * @param {object} attributes - New attributes for a site.
+ * @returns {boolean} - Returns true if attributes changed, otherwise false.
+ */
+Site.prototype.replace = function( attributes ) {
+	var changed = false;
+
+	for ( var prop in attributes ) {
+		if ( attributes.hasOwnProperty( prop ) && ! isEqual( attributes[ prop ], this[ prop ] ) ) {
+			this[ prop ] = attributes[ prop ];
+			changed = true;
+		}
+	}
+
+	// When a site icon is removed, the 'icon' prop is removed from the API result.
+	if ( this.icon && ! attributes.hasOwnProperty( 'icon' ) ) {
+		delete this.icon;
+	}
+
+	this.updateComputedAttributes();
+
+	if ( changed ) {
+		this.emit( 'change' );
+	}
+
+	return changed;
 };
 
 /**
